@@ -49,35 +49,32 @@ $resultTransact = $mysqli->query($sql);
 <body>
     <h2>Welcome, <?php echo htmlspecialchars($username); ?>!</h2>
     <?php
-    if (isset($_SESSION['errors_end_user']) && !empty($_SESSION['errors_end_user'])) {
+    if (isset($_SESSION['errors_admin_transact']) && !empty($_SESSION['errors_admin_transact'])) {
         echo '<div class="error">';
-        foreach ($_SESSION['errors_end_user'] as $error) {
+        foreach ($_SESSION['errors_admin_transact'] as $error) {
             echo htmlspecialchars($error) . '<br>';
         }
         echo '</div>';
-        unset($_SESSION['errors_end_user']);
+        unset($_SESSION['errors_admin_transact']);
     }
 
-    if (isset($_SESSION['message_end_user'])) {
-        echo '<div class="error">' . htmlspecialchars($_SESSION['message_end_user']) . '</div>';
-        unset($_SESSION['message_end_user']);
+    if (isset($_SESSION['message_admin_transact'])) {
+        echo '<div class="success">' . htmlspecialchars($_SESSION['message_admin_transact']) . '</div>';
+        unset($_SESSION['message_admin_transact']);
     }
     ?>
 
     <table>
         <tr>
             <th>Transaction ID</th>
-            <th>Transaction Mode of Payment</th>
-            <th>Transaction Time</th>
-            <th>Transaction Date</th>
-            <th>Transaction Amount</th>
-            <th>Purchased by Customer</th>
-            <th>Handled by Cashier</th>
+			<th>Transaction Mode of Payment</th>
+			<th>Transaction Time</th>
+			<th>Transaction Date</th>
+			<th>Transaction Amount</th>
+			<th>Purchased by Customer</th>
+			<th>Handled by Cashier</th>
         </tr>
-
-        <?php
-        while ($row = $resultTransact->fetch_assoc()) {
-        ?>
+        <?php while ($row = $resultTransact->fetch_assoc()) { ?>
             <tr>
                 <td><?php echo $row['TRNSC_ID']; ?></td>
                 <td><?php echo $row['TRNSC_MOP']; ?></td>
@@ -87,13 +84,13 @@ $resultTransact = $mysqli->query($sql);
                 <td><?php echo $row['CUS_ID']; ?></td>
                 <td><?php echo $row['CSHR_ID']; ?></td>
             </tr>
-        <?php
-        }
-        ?>
+        <?php } ?>
     </table>
     <br>
+
     <form action="admin_transact.php" method="post">
         <?php
+        // Show Add Transaction form if Add button clicked
         if (isset($_POST['Add'])) {
         ?>
             <h3>Add Transaction</h3>
@@ -124,8 +121,13 @@ $resultTransact = $mysqli->query($sql);
 
             <button type="submit" name="AddFinal">Add Transaction</button>
         <?php
+        } else {
+        ?>
+            <button type="submit" name="Add">Add Transaction</button>
+        <?php
         }
         ?>
+
         <?php
         // Handle AddFinal submission
         if (isset($_POST['AddFinal'])) {
@@ -169,8 +171,6 @@ $resultTransact = $mysqli->query($sql);
         }
         ?>
     </form>
-    <br><br>
+
 </body>
-
-
 </html>
