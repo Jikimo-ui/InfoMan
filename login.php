@@ -44,7 +44,7 @@ unset($_SESSION['error']); // clear error after showing
   </form>
 
   <h1>Admin Login</h1>
-  <form action="process_login_administrator.php" method="post">
+  <form action="process_login_admin.php" method="post">
     <label>Username:</label>
     <input type="text" name="username" required><br>
     <label>Password:</label>
