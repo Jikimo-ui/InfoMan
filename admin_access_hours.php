@@ -21,8 +21,6 @@ $resultACC = $mysqli->query($sql);
 
 ?>
 
-?>
-
 <head>
     <meta charset="UTF-8">
 
