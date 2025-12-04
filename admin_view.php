@@ -100,8 +100,11 @@ $resultACC = $mysqli->query($sql);
         ?>
     </table>
     <br>
-    <button><a href="end_user_update.php">Update Technician Details</a></button>
-    <button><a href="end_user_delete.php">Delete Technician Account</a></button>
+    <form action="admin_technician.php" method="post">
+        <Button type="submit" name="Add">Add Technician</button>
+        <Button type="submit" name="Update">Update Technician Details</button>
+        <Button type="submit" name="Remove">Remove Technician</button>
+    </form>
     <br><br>
 
     <table>
@@ -126,8 +129,11 @@ $resultACC = $mysqli->query($sql);
         ?>
     </table>
     <br>
-    <button><a href="end_user_update.php">Update Cashier Details</a></button>
-    <button><a href="end_user_delete.php">Delete Cashier Account</a></button>
+    <form action="admin_cashier.php" method="post">
+        <input type="submit" value="Add Cashier">
+        <input type="submit" value="Update Cashier Details">
+        <input type="submit" value="Remove Cashier">
+    </form>
     <br><br>
 
     <table>
@@ -160,8 +166,11 @@ $resultACC = $mysqli->query($sql);
         ?>
     </table>
     <br>
-    <button><a href="end_user_update.php">Update Computer Details</a></button>
-    <button><a href="end_user_delete.php">Delete Computer</a></button>
+    <form action="admin_computer.php" method="post">
+        <input type="submit" value="Add Computer">
+        <input type="submit" value="Update Computer Details">
+        <input type="submit" value="Remove Computer">
+    </form>
     <br><br>
 
     <table>
@@ -192,8 +201,9 @@ $resultACC = $mysqli->query($sql);
         ?>
     </table>
     <br>
-    <button><a href="end_user_update.php">Update Transaction Details</a></button>
-    <button><a href="end_user_delete.php">Delete Transaction</a></button>
+    <form action="admin_transact.php" method="post">
+        <input type="submit" value="Add Transaction">
+    </form>
     <br><br>
 
     <table>
@@ -224,8 +234,10 @@ $resultACC = $mysqli->query($sql);
         ?>
     </table>
     <br>
-    <button><a href="end_user_update.php">Update Access Hours Details</a></button>
-    <button><a href="end_user_delete.php">Delete Access Hours</a></button>
+    <form action="admin_access_hours.php" method="post">
+        <input type="submit" value="Add Access Hours">
+        <input type="submit" value="Remove Access Hours">
+    </form>
 </body>
 
 </html>
