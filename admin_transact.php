@@ -96,12 +96,81 @@ $resultTransact = $mysqli->query($sql);
         <?php
         if (isset($_POST['Add'])) {
         ?>
-            <Button type="submit" name="Add">Add Transaction</button>
+            <h3>Add Transaction</h3>
+
+            <label>Mode of Payment:</label>
+            <select name="TRNSC_MOP" required>
+                <option value="">--Select--</option>
+                <option value="CASH">CASH</option>
+                <option value="CASHLESS">CASHLESS</option>
+            </select><br><br>
+
+            <label>Transaction Time:</label>
+            <input type="time" name="TRNSC_TIME" required><br><br>
+
+            <label>Transaction Date:</label>
+            <input type="date" name="TRNSC_DATE" required><br><br>
+
+            <label>Amount:</label>
+            <input type="number" name="TRNSC_AMOUNT" step="0.01" min="0" required><br><br>
+
+            <label>Customer ID:</label>
+            <input type="text" name="CUS_ID"><br>
+            <br>
+
+            <label>Cashier ID:</label>
+            <input type="text" name="CSHR_ID"><br>
+           
+
+            <button type="submit" name="AddFinal">Add Transaction</button>
         <?php
+        }
+        ?>
+        <?php
+        // Handle AddFinal submission
+        if (isset($_POST['AddFinal'])) {
+            $mop    = $_POST['TRNSC_MOP'];
+            $time   = $_POST['TRNSC_TIME'];
+            $date   = $_POST['TRNSC_DATE'];
+            $amount = $_POST['TRNSC_AMOUNT'];
+            $cus_id = $_POST['CUS_ID'] ?: NULL;
+            $cash_id = $_POST['CSHR_ID'] ?: NULL;
+
+            $errors = [];
+            if (empty($mop)) $errors[] = "Mode of Payment is required.";
+            if (empty($time)) $errors[] = "Time is required.";
+            if (empty($date)) $errors[] = "Date is required.";
+            if (empty($amount)) $errors[] = "Amount is required.";
+
+            if (count($errors) > 0) {
+                $_SESSION['errors_admin_transact'] = $errors;
+                header("Location: admin_transact.php");
+                exit();
+            }
+
+            // Auto-generate TRNSC_ID
+            $res = $mysqli->query("SELECT TRNSC_ID FROM Transact ORDER BY TRNSC_ID DESC LIMIT 1");
+            $last_id = $res->fetch_assoc()['TRNSC_ID'] ?? 'TR000';
+            $num = (int)substr($last_id, 2) + 1;
+            $new_id = 'TR' . str_pad($num, 3, '0', STR_PAD_LEFT);
+
+            $sql = "INSERT INTO Transact (TRNSC_ID, TRNSC_MOP, TRNSC_TIME, TRNSC_DATE, TRNSC_AMOUNT, CUS_ID, CSHR_ID)
+                    VALUES ('$new_id','$mop','$time','$date','$amount','$cus_id','$cash_id')";
+
+            if ($mysqli->query($sql)) {
+                $_SESSION['message_admin_transact'] = "Transaction added successfully.";
+                header("Location: admin_transact.php");
+                exit();
+            } else {
+                $_SESSION['errors_admin_transact'] = ["Error: " . $mysqli->error];
+                header("Location: admin_transact.php");
+                exit();
+            }
         }
         ?>
     </form>
     <br><br>
 </body>
+
 
 </html>
