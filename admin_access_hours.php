@@ -97,7 +97,7 @@ $resultACC = $mysqli->query($sql);
     <form action="admin_access_hours.php" method="post">
         <?php
         // If Add button was clicked earlier
-        if (isset($_POST['Add'])) {
+        if (isset($_POST['Add']) || $_GET('action') === 'add') {
         ?>
             <h3>Add Access Hours</h3>
             <label>Access Time:</label>
@@ -155,7 +155,7 @@ $resultACC = $mysqli->query($sql);
 
             if (count($errors) > 0) {
                 $_SESSION['errors_admin_access_hours'] = $errors;
-                header("Location: admin_access_hours.php");
+                header("Location: admin_access_hours.php?action=add");
                 exit();
             }
 
@@ -169,13 +169,13 @@ $resultACC = $mysqli->query($sql);
                 exit();
             } else {
                 $_SESSION['errors_admin_access_hours'] = "Error: " . $mysqli->error;
-                header("Location: admin_access_hours.php");
+                header("Location: admin_access_hours.php?action=add");
                 exit();
             }
         }
 
         // If Remove button was clicked earlier
-        if (isset($_POST['Remove'])) {
+        if (isset($_POST['Remove']) || $_GET('action') === 'remove') {
         ?>
             <h3>Remove Access Hours</h3>
             <label>Access Time:</label>
@@ -199,7 +199,7 @@ $resultACC = $mysqli->query($sql);
             // If validation errors exist
             if (count($errors) > 0) {
                 $_SESSION['errors_admin_access_hours'] = $errors;
-                header("Location: admin_access_hours.php");
+                header("Location: admin_access_hours.php?action=remove");
                 exit();
             }
 
@@ -212,12 +212,12 @@ $resultACC = $mysqli->query($sql);
                     exit();
                 } else {
                     $_SESSION['errors_admin_access_hours'] = ["No record found with that Access Time."];
-                    header("Location: admin_access_hours.php");
+                    header("Location: admin_access_hours.php?action=remove");
                     exit();
                 }
             } else {
                 $_SESSION['errors_admin_access_hours'] = ["Error removing record: " . $mysqli->error];
-                header("Location: admin_access_hours.php");
+                header("Location: admin_access_hours.php?action=remove");
                 exit();
             }
         }
