@@ -221,7 +221,7 @@ $resultACC = $mysqli->query($sql);
         while ($row = $resultACC->fetch_assoc()) {
         ?>
             <tr>
-                <td><?php echo $row['CUS_ID']; ?></td>
+                <td><?php echo $row['ACC_TIME']; ?></td>
                 <td><?php echo $row['ACC_START']; ?></td>
                 <td><?php echo $row['ACC_END']; ?></td>
                 <td><?php echo $row['ACC_DURATION']; ?></td>

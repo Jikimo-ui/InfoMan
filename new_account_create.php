@@ -47,7 +47,14 @@ if ($result->num_rows > 0) {
 $result->close();
 
 // Basic validation
-if (empty(trim($cus_id))) $errors[] = 'Customer ID is required.';
+if (empty($cus_id)) {
+    $errors[] = 'Customer ID is required.';
+} elseif (ctype_digit($cus_id)) {
+    $errors[] = 'Customer ID cannot be only numbers. Must start with C.';
+} elseif (!preg_match('/^C([0-9]{1,5})$/', $cus_id)) {
+    $errors[] = 'Customer ID must follow format C0 to C99999.';
+}
+
 if (empty(trim($username))) $errors[] = 'Username is required.';
 if (empty(trim($password_plain))) $errors[] = 'Password is required.';
 if (empty(trim($fname)) || empty(trim($lname))) $errors[] = 'Full name is required.';

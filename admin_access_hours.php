@@ -2,7 +2,7 @@
 session_start();
 
 $user = 'root';
-$password = 'D1dhen1102';
+$password = '123456';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -15,12 +15,35 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 $id = isset($_SESSION['id']) ? $_SESSION['id'] : '';
 
 $sql = "SELECT * FROM Access_Hours";
-$resultAC = $mysqli->query($sql);
+$resultACC = $mysqli->query($sql);
 //$mysqli->close();
+
+// Handle Add Access Hours
+if (isset($_POST['AddFinal'])) {
+    $acc_time    = $_POST['ACC_TIME'];
+    $acc_start   = $_POST['ACC_START'];
+    $acc_end     = $_POST['ACC_END'];
+    $acc_duration= $_POST['ACC_DURATION'];
+    $acc_cost    = $_POST['ACC_COST'];
+    $cus_id      = $_POST['CUS_ID'];
+    $cashier_id  = $_POST['CSHR_ID'];
+
+    $sql = "INSERT INTO Access_Hours 
+            (ACC_TIME, ACC_START, ACC_END, ACC_DURATION, ACC_COST, CUS_ID, CSHR_ID)
+            VALUES ('$acc_time', '$acc_start', '$acc_end', '$acc_duration', '$acc_cost', '$cus_id', '$cashier_id')";
+
+    if ($mysqli->query($sql) === TRUE) {
+        $_SESSION['message_end_user'] = "Access Hours record added successfully.";
+    } else {
+        $_SESSION['errors_end_user'][] = "Error: " . $mysqli->error;
+    }
+
+    header("Location: admin_access_hours.php");
+    exit();
+}
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+?>
 
 <head>
     <meta charset="UTF-8">
@@ -76,7 +99,7 @@ $resultAC = $mysqli->query($sql);
         </tr>
 
         <?php
-        while ($row = $resultAC->fetch_assoc()) {
+        while ($row = $resultACC->fetch_assoc()) {
         ?>
             <tr>
                 <td><?php echo $row['ACC_TIME']; ?></td>
@@ -92,23 +115,51 @@ $resultAC = $mysqli->query($sql);
         ?>
     </table>
     <br>
+
     <form action="admin_access_hours.php" method="post">
         <?php
+        // If Add button was clicked earlier
         if (isset($_POST['Add'])) {
         ?>
-            <Button type="submit" name="Add">Add Access Hours</button>
+            <h3>Add Access Hours</h3>
+            <label>Access Time:</label>
+            <input type="datetime-local" name="ACC_TIME"><br>
+
+            <label>Start Time:</label>
+            <input type="datetime-local" name="ACC_START"><br>
+
+            <label>End Time:</label>
+            <input type="datetime-local" name="ACC_END"><br>
+
+            <label>Duration:</label>
+            <input type="time" name="ACC_DURATION"><br>
+
+            <label>Cost:</label>
+            <input type="number" step="0.01" name="ACC_COST"><br>
+
+            <label>Customer ID:</label>
+            <input type="text" name="CUS_ID"><br>
+
+            <label>Cashier ID:</label>
+            <input type="text" name="CSHR_ID"><br>
+
+            <button type="submit" name="AddFinal">Add Access Hours</button>
         <?php
         }
-        ?>
-        <?php
+
+        // If Remove button was clicked earlier
         if (isset($_POST['Remove'])) {
         ?>
-            <Button type="submit" name="Remove">Remove Access Hours</button>
+            <h3>Remove Access Hours</h3>
+            <label>Access Time:</label>
+            <input type="datetime-local" name="ACC_TIME" required><br>
+
+            <button type="submit" name="RemoveFinal">Remove Access Hours</button>
         <?php
         }
         ?>
+
     </form>
-    <br><br>
 </body>
 
 </html>
