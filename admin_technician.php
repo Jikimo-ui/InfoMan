@@ -10,108 +10,133 @@ $mysqli = new mysqli($servername, $user, $password, $database);
 if ($mysqli->connect_error) {
     die('Connect Error(' . $mysqli->connect_errno . ')' . $mysqli->connect_error);
 }
-
-$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
-$id = isset($_SESSION['id']) ? $_SESSION['id'] : '';
-
-$sql = "SELECT * FROM Technician";
-$resultTECH = $mysqli->query($sql);
-//$mysqli->close();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 500px;
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-
-        th,
-        td {
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
-
+    <title>Technician Management</title>
 </head>
-
 <body>
-    <h2>Welcome, <?php echo htmlspecialchars($username); ?>!</h2>
-    <?php
-    if (isset($_SESSION['errors_end_user']) && !empty($_SESSION['errors_end_user'])) {
-        echo '<div class="error">';
-        foreach ($_SESSION['errors_end_user'] as $error) {
-            echo htmlspecialchars($error) . '<br>';
-        }
-        echo '</div>';
-        unset($_SESSION['errors_end_user']);
-    }
 
-    if (isset($_SESSION['message_end_user'])) {
-        echo '<div class="error">' . htmlspecialchars($_SESSION['message_end_user']) . '</div>';
-        unset($_SESSION['message_end_user']);
-    }
-    ?>
+<h2>Technician Management</h2>
 
-    <table>
-        <tr>
-            <th>Technician ID</th>
-            <th>Technician Name</th>
-            <th>Technician Shift</th>
-            <th>Technician Salary</th>
-            <th>Technician Specialization</th>
-        </tr>
+<?php
+// SHOW ADD TECHNICIAN FORM
+if (isset($_POST['Add'])) {
+?>
+    <h3>Add Technician</h3>
+    <form method="post">
+        Technician ID (TECH_ID): <input type="text" name="TECH_ID" required><br><br>
+        First Name: <input type="text" name="TECH_FNAME"><br><br>
+        Last Name: <input type="text" name="TECH_LNAME"><br><br>
+        Shift: <input type="text" name="TECH_SHIFT"><br><br>
+        Salary: <input type="number" name="TECH_SALARY"><br><br>
+        Specialization: <input type="text" name="TECH_SPECIALIZATION"><br><br>
 
-        <?php
-        while ($row = $resultTECH->fetch_assoc()) {
-        ?>
-            <tr>
-                <td><?php echo $row['TECH_ID']; ?></td>
-                <td><?php echo $row['TECH_FNAME'] . " " . $row['TECH_LNAME']; ?></td>
-                <td><?php echo $row['TECH_SHIFT']; ?></td>
-                <td><?php echo $row['TECH_SALARY']; ?></td>
-                <td><?php echo $row['TECH_SPECIALIZATION']; ?></td>
-            </tr>
-        <?php
-        }
-        ?>
-    </table>
-    <br>
-    <form action="admin_technician.php" method="post">
-        <?php
-        if (isset($_POST['Add'])) {
-        ?>
-            <Button type="submit" name="Add">Add Technician</button>
-        <?php
-        }
-        ?>
-        <?php
-        if (isset($_POST['Update'])) {
-        ?>
-            <Button type="submit" name="Update">Update Technician Details</button>
-        <?php
-        }
-        ?>
-        <?php
-        if (isset($_POST['Remove'])) {
-        ?>
-            <Button type="submit" name="Remove">Remove Technician</button>
-        <?php
-        }
-        ?>
+        <button type="submit" name="AddSubmit">Submit</button>
     </form>
-    <br><br>
-</body>
+<?php
+}
 
+// PROCESS ADD TECHNICIAN
+if (isset($_POST['AddSubmit'])) {
+    
+    $tech_id = $_POST['TECH_ID'];
+    $fname = $_POST['TECH_FNAME'];
+    $lname = $_POST['TECH_LNAME'];
+    $shift = $_POST['TECH_SHIFT'];
+    $salary = $_POST['TECH_SALARY'];
+    $spec = $_POST['TECH_SPECIALIZATION'];
+
+    $sql = "INSERT INTO Technician (TECH_ID, TECH_FNAME, TECH_LNAME, TECH_SHIFT, TECH_SALARY, TECH_SPECIALIZATION)
+            VALUES ('$tech_id', '$fname', '$lname', '$shift', '$salary', '$spec')";
+
+    $mysqli->query($sql);
+
+    echo "<p>Technician added successfully!</p>";
+}
+
+?>
+
+<?php
+// SHOW UPDATE TECHNICIAN FORM
+if (isset($_POST['Update'])) {
+?>
+    <h3>Update Technician</h3>
+    <form method="post">
+        Technician ID (TECH_ID): <input type="text" name="TECH_ID" required><br><br>
+
+        New First Name: <input type="text" name="TECH_FNAME"><br><br>
+        New Last Name: <input type="text" name="TECH_LNAME"><br><br>
+        New Shift: <input type="text" name="TECH_SHIFT"><br><br>
+        New Salary: <input type="number" name="TECH_SALARY"><br><br>
+        New Specialization: <input type="text" name="TECH_SPECIALIZATION"><br><br>
+
+        <button type="submit" name="UpdateSubmit">Submit Changes</button>
+    </form>
+<?php
+}
+
+// PROCESS UPDATE TECHNICIAN WITH EMPTY-FIELD HANDLING
+if (isset($_POST['UpdateSubmit'])) {
+
+    $id = $_POST['TECH_ID'];
+
+    // Get existing record
+    $result = $mysqli->query("SELECT * FROM Technician WHERE TECH_ID='$id'");
+    $existing = $result->fetch_assoc();
+
+    // Keep old values if new ones are blank
+    $fname = $_POST['TECH_FNAME'] !== "" ? $_POST['TECH_FNAME'] : $existing['TECH_FNAME'];
+    $lname = $_POST['TECH_LNAME'] !== "" ? $_POST['TECH_LNAME'] : $existing['TECH_LNAME'];
+    $shift = $_POST['TECH_SHIFT'] !== "" ? $_POST['TECH_SHIFT'] : $existing['TECH_SHIFT'];
+    $salary = $_POST['TECH_SALARY'] !== "" ? $_POST['TECH_SALARY'] : $existing['TECH_SALARY'];
+    $spec = $_POST['TECH_SPECIALIZATION'] !== "" ? $_POST['TECH_SPECIALIZATION'] : $existing['TECH_SPECIALIZATION'];
+
+    // Perform update
+    $sql = "UPDATE Technician 
+            SET TECH_FNAME='$fname',
+                TECH_LNAME='$lname',
+                TECH_SHIFT='$shift',
+                TECH_SALARY='$salary',
+                TECH_SPECIALIZATION='$spec'
+            WHERE TECH_ID='$id'";
+
+    $mysqli->query($sql);
+
+    echo "<p>Technician updated successfully! (Blank fields kept original values)</p>";
+}
+?>
+
+<?php
+// SHOW REMOVE TECHNICIAN FORM
+if (isset($_POST['Remove'])) {
+?>
+    <h3>Remove Technician</h3>
+    <form method="post">
+        Technician ID (TECH_ID): <input type="text" name="TECH_ID"><br><br>
+        <button type="submit" name="RemoveSubmit">Remove Technician</button>
+    </form>
+<?php
+}
+
+// PROCESS REMOVE TECHNICIAN
+if (isset($_POST['RemoveSubmit'])) {
+
+    $id = $_POST['TECH_ID'];
+
+    $sql = "DELETE FROM Technician WHERE TECH_ID='$id'";
+    $mysqli->query($sql);
+
+    echo "<p>Technician removed successfully!</p>";
+}
+?>
+
+<br>
+<form action="admin_view.php" method="post">
+    <button type=submit>Return to Admin View</button>
+</form>
+
+</body>
 </html>
