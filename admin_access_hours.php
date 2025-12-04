@@ -97,7 +97,7 @@ $resultACC = $mysqli->query($sql);
     <form action="admin_access_hours.php" method="post">
         <?php
         // If Add button was clicked earlier
-        if (isset($_POST['Add']) || $_GET('action') === 'add') {
+        if (isset($_POST['Add']) || $_GET['action'] === 'add') {
         ?>
             <h3>Add Access Hours</h3>
             <label>Access Time:</label>
@@ -175,7 +175,7 @@ $resultACC = $mysqli->query($sql);
         }
 
         // If Remove button was clicked earlier
-        if (isset($_POST['Remove']) || $_GET('action') === 'remove') {
+        if (isset($_POST['Remove']) || $_GET['action'] === 'remove') {
         ?>
             <h3>Remove Access Hours</h3>
             <label>Access Time:</label>
