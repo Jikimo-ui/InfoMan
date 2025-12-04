@@ -130,9 +130,9 @@ $resultACC = $mysqli->query($sql);
     </table>
     <br>
     <form action="admin_cashier.php" method="post">
-        <input type="submit" value="Add Cashier">
-        <input type="submit" value="Update Cashier Details">
-        <input type="submit" value="Remove Cashier">
+        <Button type="submit" name="Add">Add Cashier</button>
+        <Button type="submit" name="Update">Update Cashier Details</button>
+        <Button type="submit" name="Remove">Remove Cashier</button>
     </form>
     <br><br>
 
@@ -166,20 +166,20 @@ $resultACC = $mysqli->query($sql);
         ?>
     </table>
     <br>
-    <form action="admin_computer.php" method="post">
-        <input type="submit" value="Add Computer">
-        <input type="submit" value="Update Computer Details">
-        <input type="submit" value="Remove Computer">
+    <form action="admin_pc.php" method="post">
+        <Button type="submit" name="Add">Add PC</button>
+        <Button type="submit" name="Update">Update PC Details</button>
+        <Button type="submit" name="Remove">Remove PC</button>
     </form>
     <br><br>
 
     <table>
         <tr>
-            <th>Transact ID</th>
-            <th>Transact Mode of Payment</th>
-            <th>Transact Time</th>
-            <th>Transact Date</th>
-            <th>Transact Amount</th>
+            <th>Transaction ID</th>
+            <th>Transaction Mode of Payment</th>
+            <th>Transaction Time</th>
+            <th>Transaction Date</th>
+            <th>Transaction Amount</th>
             <th>Purchased by Customer</th>
             <th>Handled by Cashier</th>
         </tr>
@@ -201,8 +201,8 @@ $resultACC = $mysqli->query($sql);
         ?>
     </table>
     <br>
-    <form action="admin_transact.php" method="post">
-        <input type="submit" value="Add Transaction">
+    <form action="admin_transaction.php" method="post">
+        <Button type="submit" name="Add">Add Transaction</button>
     </form>
     <br><br>
 
@@ -235,8 +235,8 @@ $resultACC = $mysqli->query($sql);
     </table>
     <br>
     <form action="admin_access_hours.php" method="post">
-        <input type="submit" value="Add Access Hours">
-        <input type="submit" value="Remove Access Hours">
+        <Button type="submit" name="Add">Add Access Hours</button>
+        <Button type="submit" name="Remove">Remove Access Hours</button>
     </form>
 </body>
 
