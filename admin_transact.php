@@ -96,6 +96,9 @@ $resultTransact = $mysqli->query($sql);
             <h3>Add Transaction</h3>
 
             <label>Mode of Payment:</label>
+
+<!-- ADD FIELD FOR TRNSC ID XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
+		
             <select name="TRNSC_MOP" required>
                 <option value="">--Select--</option>
                 <option value="CASH">CASH</option>
@@ -139,6 +142,9 @@ $resultTransact = $mysqli->query($sql);
             $cash_id = $_POST['CSHR_ID'] ?: NULL;
 
             $errors = [];
+
+	// CHECK ERRORS FOR ALL IDS HERE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+			
             if (empty($mop)) $errors[] = "Mode of Payment is required.";
             if (empty($time)) $errors[] = "Time is required.";
             if (empty($date)) $errors[] = "Date is required.";
@@ -174,3 +180,4 @@ $resultTransact = $mysqli->query($sql);
 
 </body>
 </html>
+
