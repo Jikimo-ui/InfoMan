@@ -83,7 +83,7 @@ if (isset($_SESSION['message_admin_cashier'])) {
 <form action="admin_cashier.php" method="post">
     <?php
     
-    if (isset($_POST['Add']) || (isset($_GET['action']) && $_GET['action'] === 'add')) {
+    if (isset($_POST['Add']) || isset($_GET['action'] === 'add')) {
         $old_id = $_POST['CSHR_ID'] ?? '';
         $old_fname = $_POST['CSHR_FNAME'] ?? '';
         $old_lname = $_POST['CSHR_LNAME'] ?? '';
@@ -239,3 +239,4 @@ if (isset($_POST['RemoveSubmit'])) {
 </form>
 </body>
 </html>
+
