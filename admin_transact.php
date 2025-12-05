@@ -67,12 +67,12 @@ $resultTransact = $mysqli->query($sql);
     <table>
         <tr>
             <th>Transaction ID</th>
-			<th>Transaction Mode of Payment</th>
-			<th>Transaction Time</th>
-			<th>Transaction Date</th>
-			<th>Transaction Amount</th>
-			<th>Purchased by Customer</th>
-			<th>Handled by Cashier</th>
+            <th>Transaction Mode of Payment</th>
+            <th>Transaction Time</th>
+            <th>Transaction Date</th>
+            <th>Transaction Amount</th>
+            <th>Purchased by Customer</th>
+            <th>Handled by Cashier</th>
         </tr>
         <?php while ($row = $resultTransact->fetch_assoc()) { ?>
             <tr>
@@ -94,11 +94,9 @@ $resultTransact = $mysqli->query($sql);
         if (isset($_POST['Add'])) {
         ?>
             <h3>Add Transaction</h3>
+            Transaction ID : <input type="text" name="TRNSC_ID" required><br><br>
 
             <label>Mode of Payment:</label>
-
-<!-- ADD FIELD FOR TRNSC ID XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
-		
             <select name="TRNSC_MOP" required>
                 <option value="">--Select--</option>
                 <option value="CASH">CASH</option>
@@ -120,7 +118,7 @@ $resultTransact = $mysqli->query($sql);
 
             <label>Cashier ID:</label>
             <input type="text" name="CSHR_ID"><br>
-           
+
 
             <button type="submit" name="AddFinal">Add Transaction</button>
         <?php
@@ -134,6 +132,7 @@ $resultTransact = $mysqli->query($sql);
         <?php
         // Handle AddFinal submission
         if (isset($_POST['AddFinal'])) {
+            $id = $_POST['TRNSC_ID'];
             $mop    = $_POST['TRNSC_MOP'];
             $time   = $_POST['TRNSC_TIME'];
             $date   = $_POST['TRNSC_DATE'];
@@ -143,8 +142,16 @@ $resultTransact = $mysqli->query($sql);
 
             $errors = [];
 
-	// CHECK ERRORS FOR ALL IDS HERE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
-			
+            // CHECK ERRORS FOR ALL IDS HERE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+            if (empty($id)) $errors[] = "Transaction ID is required.";
+            elseif (!preg_match('/^TR[0-9]{1,4}$/', $id)) $errors[] = "Transaction ID must follow format TR0-TR9999.";
+
+            if (empty($cus_id)) $errors[] = "Customer ID is required.";
+            elseif (!preg_match('/^C[0-9]{1,5}$/', $cus_id)) $errors[] = "Customer ID must follow format C0-C99999.";
+
+            if (empty($cash_id)) $errors[] = "Cashier ID is required.";
+            elseif (!preg_match('/^CS[0-9]{1,4}$/', $cash_id)) $errors[] = "Cashier ID must follow format CS0-CS9999.";
+
             if (empty($mop)) $errors[] = "Mode of Payment is required.";
             if (empty($time)) $errors[] = "Time is required.";
             if (empty($date)) $errors[] = "Date is required.";
@@ -156,18 +163,12 @@ $resultTransact = $mysqli->query($sql);
                 exit();
             }
 
-            // Auto-generate TRNSC_ID
-            $res = $mysqli->query("SELECT TRNSC_ID FROM Transact ORDER BY TRNSC_ID DESC LIMIT 1");
-            $last_id = $res->fetch_assoc()['TRNSC_ID'] ?? 'TR000';
-            $num = (int)substr($last_id, 2) + 1;
-            $new_id = 'TR' . str_pad($num, 3, '0', STR_PAD_LEFT);
-
             $sql = "INSERT INTO Transact (TRNSC_ID, TRNSC_MOP, TRNSC_TIME, TRNSC_DATE, TRNSC_AMOUNT, CUS_ID, CSHR_ID)
-                    VALUES ('$new_id','$mop','$time','$date','$amount','$cus_id','$cash_id')";
+                    VALUES ('$id','$mop','$time','$date','$amount','$cus_id','$cash_id')";
 
             if ($mysqli->query($sql)) {
-                $_SESSION['message_admin_transact'] = "Transaction added successfully.";
-                header("Location: admin_transact.php");
+                $_SESSION['message_admin_view'] = "Transaction added successfully.";
+                header("Location: admin_view.php");
                 exit();
             } else {
                 $_SESSION['errors_admin_transact'] = ["Error: " . $mysqli->error];
@@ -179,5 +180,5 @@ $resultTransact = $mysqli->query($sql);
     </form>
 
 </body>
-</html>
 
+</html>

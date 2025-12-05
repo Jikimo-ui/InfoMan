@@ -169,7 +169,9 @@ if (isset($_POST['AddSubmit'])) {
     $errors = [];
 //ADD MORE ERRORS HERE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx
 	
-    if (empty($id)) $errors[] = "Cashier ID is required.";
+    if (empty($id)) { $errors[] = "Cashier ID is required.";}
+
+    else if (!preg_match('/^CS[0-9]{1,4}$/', $id)) $errors[] = "Cashier ID must follow format CS0-CS9999.";
 
     if ($errors) {
         $_SESSION['errors_admin_cashier'] = $errors;
