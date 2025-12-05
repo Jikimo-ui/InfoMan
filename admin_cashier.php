@@ -83,7 +83,7 @@ if (isset($_SESSION['message_admin_cashier'])) {
 <form action="admin_cashier.php" method="post">
     <?php
     
-    if (isset($_POST['Add']) || isset($_GET['action'] === 'add')) {
+    if (isset($_POST['Add']) || isset($_GET['action']) === 'add')) {
         $old_id = $_POST['CSHR_ID'] ?? '';
         $old_fname = $_POST['CSHR_FNAME'] ?? '';
         $old_lname = $_POST['CSHR_LNAME'] ?? '';
@@ -120,7 +120,7 @@ if (isset($_SESSION['message_admin_cashier'])) {
 
     <?php
     
-    if (isset($_POST['Update']) || (isset($_GET['action']) && $_GET['action'] === 'update')) {
+    if (isset($_POST['Update']) || (isset($_GET['action']) === 'update')) {
     ?>
         <h3>Update Cashier</h3>
         <label>Cashier ID:</label>
@@ -136,7 +136,6 @@ if (isset($_SESSION['message_admin_cashier'])) {
 		<input type="datetime-local" name="CSHR_SHIFT" 
        value="<?php echo htmlspecialchars($existing['CSHR_SHIFT'] ? date('Y-m-d\TH:i', strtotime($existing['CSHR_SHIFT'])) : ''); ?>"><br><br>
 
-
         <label>New Salary:</label>
         <input type="number" name="CSHR_SALARY" step="0.01"><br><br>
 
@@ -147,7 +146,7 @@ if (isset($_SESSION['message_admin_cashier'])) {
 
     <?php
     // Show Remove form
-    if (isset($_POST['Remove']) || (isset($_GET['action']) && $_GET['action'] === 'remove')) {
+    if (isset($_POST['Remove']) || (isset($_GET['action']) === 'remove')) {
     ?>
         <h3>Remove Cashier</h3>
         <label>Cashier ID:</label>
@@ -168,6 +167,8 @@ if (isset($_POST['AddSubmit'])) {
     $salary = $_POST['CSHR_SALARY'];
 
     $errors = [];
+//ADD MORE ERRORS HERE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx
+	
     if (empty($id)) $errors[] = "Cashier ID is required.";
 
     if ($errors) {
@@ -239,4 +240,5 @@ if (isset($_POST['RemoveSubmit'])) {
 </form>
 </body>
 </html>
+
 
