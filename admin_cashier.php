@@ -120,7 +120,7 @@ if (isset($_SESSION['message_admin_cashier'])) {
 
     <?php
     
-    if (isset($_POST['Update']) || (isset($_GET['action']) === 'update')) {
+    if (isset($_POST['Update']) || (isset($_GET['action']) === 'update') {
     ?>
         <h3>Update Cashier</h3>
         <label>Cashier ID:</label>
@@ -146,7 +146,7 @@ if (isset($_SESSION['message_admin_cashier'])) {
 
     <?php
     // Show Remove form
-    if (isset($_POST['Remove']) || (isset($_GET['action']) === 'remove')) {
+    if (isset($_POST['Remove']) || (isset($_GET['action']) === 'remove') {
     ?>
         <h3>Remove Cashier</h3>
         <label>Cashier ID:</label>
@@ -240,5 +240,6 @@ if (isset($_POST['RemoveSubmit'])) {
 </form>
 </body>
 </html>
+
 
 
