@@ -2,7 +2,7 @@
 session_start();
 
 $user = 'root';
-$password = 'D1dhen1102';
+$password = '123456';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -243,5 +243,6 @@ $resultACC = $mysqli->query($sql);
         <Button type="submit" name="Back">Back to Admin View</button>
     </form>
 </body>
+
 
 </html>
