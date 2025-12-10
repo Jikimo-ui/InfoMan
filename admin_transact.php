@@ -113,11 +113,28 @@ $resultTransact = $mysqli->query($sql);
             <input type="number" name="TRNSC_AMOUNT" step="0.01" min="0" required><br><br>
 
             <label>Customer ID:</label>
-            <input type="text" name="CUS_ID"><br>
-            <br>
+            <select name="CUS_ID" required>
+                <option value="">--Select Customer--</option>
+                <?php
+                $result = $mysqli->query("SELECT CUS_ID FROM Customer");
+                while ($comp = $result->fetch_assoc()) {
+                    echo '<option value="' . htmlspecialchars($comp['CUS_ID']) . '">'
+                        . htmlspecialchars($comp['CUS_ID']) . '</option>';
+                }
+                ?>
+            </select><br><br>
 
             <label>Cashier ID:</label>
-            <input type="text" name="CSHR_ID"><br>
+            <select name="CSHR_ID" required>
+                <option value="">--Select Cashier--</option>
+                <?php
+                $result = $mysqli->query("SELECT CSHR_ID FROM Cashier");
+                while ($comp = $result->fetch_assoc()) {
+                    echo '<option value="' . htmlspecialchars($comp['CSHR_ID']) . '">'
+                        . htmlspecialchars($comp['CSHR_ID']) . '</option>';
+                }
+                ?>
+            </select><br><br>
 
 
             <br><button type="submit" name="AddFinal">Add Transaction</button>
@@ -185,7 +202,6 @@ $resultTransact = $mysqli->query($sql);
     </form>
 
 </body>
-
 
 
 </html>
