@@ -2,7 +2,7 @@
 session_start();
 
 $user = 'root';
-$password = 'D1dhen1102';
+$password = '123456';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -24,4 +24,5 @@ session_destroy();
 session_start();
 $_SESSION['message_login'] = "Customer record deleted successfully.";
 header('Location: login.php');
+
 ?>
