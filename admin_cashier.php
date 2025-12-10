@@ -2,7 +2,7 @@
 session_start();
 
 $user = 'root';
-$password = 'D1dhen1102';
+$password = '123456';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -297,5 +297,6 @@ $resultCashier = $mysqli->query("SELECT * FROM Cashier");
         <button type="submit">Return to Admin View</button>
     </form>
 </body>
+
 
 </html>
