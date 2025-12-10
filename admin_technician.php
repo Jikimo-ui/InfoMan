@@ -223,6 +223,7 @@ if (!$resultTECH) {
         if (empty(trim($lname))) $errors[] = "Last name cannot be empty.";
         if (empty(trim($shift))) $errors[] = "Shift cannot be empty.";
         if (!is_numeric($salary)) $errors[] = "Salary must be a numeric value.";
+        if (empty(trim($spec))) $errors[] = "Specialization cannot be empty.";
 
         // If there are errors, redirect with messages
         if (!empty($errors)) {
@@ -325,3 +326,4 @@ if (!$resultTECH) {
 
 
 </html>
+
