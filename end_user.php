@@ -2,7 +2,7 @@
 session_start();
 
 $user = 'root';
-$password = 'D1dhen1102';
+$password = '123456';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -88,5 +88,6 @@ $result = $mysqli->query($sql);
     <button><a href="end_user_update.php">Update Personal Details</a></button>
     <button><a href="end_user_delete.php">Delete Account</a></button>
 </body>
+
 
 </html>
