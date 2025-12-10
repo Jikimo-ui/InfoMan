@@ -61,18 +61,18 @@ $resultACC = $mysqli->query($sql);
 <body>
     <h2>Welcome, <?php echo htmlspecialchars($username); ?>!</h2>
     <?php
-    if (isset($_SESSION['errors_end_user']) && !empty($_SESSION['errors_end_user'])) {
+    if (isset($_SESSION['errors_admin_view']) && !empty($_SESSION['errors_admin_view'])) {
         echo '<div class="error">';
-        foreach ($_SESSION['errors_end_user'] as $error) {
+        foreach ($_SESSION['errors_admin_view'] as $error) {
             echo htmlspecialchars($error) . '<br>';
         }
         echo '</div>';
-        unset($_SESSION['errors_end_user']);
+        unset($_SESSION['errors_admin_view']);
     }
 
-    if (isset($_SESSION['message_end_user'])) {
-        echo '<div class="error">' . htmlspecialchars($_SESSION['message_end_user']) . '</div>';
-        unset($_SESSION['message_end_user']);
+    if (isset($_SESSION['message_admin_view'])) {
+        echo '<div class="error">' . htmlspecialchars($_SESSION['message_admin_view']) . '</div>';
+        unset($_SESSION['message_admin_view']);
     }
     ?>
 
@@ -242,3 +242,4 @@ $resultACC = $mysqli->query($sql);
 
 
 </html>
+
