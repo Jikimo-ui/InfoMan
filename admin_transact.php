@@ -2,7 +2,7 @@
 session_start();
 
 $user = 'root';
-$password = '123456';
+$password = 'D1dhen1102';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -59,7 +59,7 @@ $resultTransact = $mysqli->query($sql);
     }
 
     if (isset($_SESSION['message_admin_transact'])) {
-        echo '<div class="success">' . htmlspecialchars($_SESSION['message_admin_transact']) . '</div>';
+        echo '<div class="error">' . htmlspecialchars($_SESSION['message_admin_transact']) . '</div>';
         unset($_SESSION['message_admin_transact']);
     }
     ?>
@@ -91,7 +91,7 @@ $resultTransact = $mysqli->query($sql);
     <form action="admin_transact.php" method="post">
         <?php
         // Show Add Transaction form if Add button clicked
-        if (isset($_POST['Add'])) {
+        if (isset($_POST['Add']) || isset($_GET['action']) === 'add') {
         ?>
             <h3>Add Transaction</h3>
             Transaction ID : <input type="text" name="TRNSC_ID" required><br><br>
@@ -120,11 +120,11 @@ $resultTransact = $mysqli->query($sql);
             <input type="text" name="CSHR_ID"><br>
 
 
-            <button type="submit" name="AddFinal">Add Transaction</button>
+            <br><button type="submit" name="AddFinal">Add Transaction</button>
         <?php
         } else {
         ?>
-            <button type="submit" name="Add">Add Transaction</button>
+            <button type="submit" name="Add">Add Transaction</button><br>
         <?php
         }
         ?>
@@ -159,7 +159,7 @@ $resultTransact = $mysqli->query($sql);
 
             if (count($errors) > 0) {
                 $_SESSION['errors_admin_transact'] = $errors;
-                header("Location: admin_transact.php");
+                header("Location: admin_transact.php?action=add");
                 exit();
             }
 
@@ -172,11 +172,16 @@ $resultTransact = $mysqli->query($sql);
                 exit();
             } else {
                 $_SESSION['errors_admin_transact'] = ["Error: " . $mysqli->error];
-                header("Location: admin_transact.php");
+                header("Location: admin_transact.php?action=add");
                 exit();
             }
         }
         ?>
+        
+    </form>
+    
+    <form action="admin_view.php" method="post">
+        <br><button type=submit>Return to Admin View</button>
     </form>
 
 </body>

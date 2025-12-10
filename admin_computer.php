@@ -1,9 +1,8 @@
-
 <?php
 session_start();
 
 $user = 'root';
-$password = '123456';
+$password = 'D1dhen1102';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -102,7 +101,7 @@ if (!$resultCOMP) {
     ?>
 
     <!-- ADD COMPUTER FORM -->
-    <?php if (isset($_POST['Add'])) { ?>
+    <?php if (isset($_POST['Add']) || isset($_GET['action']) === 'add') { ?>
         <h3>Add Computer</h3>
         <form method="post">
             PC ID: <input type="text" name="PC_ID" value="<?php echo isset($_POST['PC_ID']) ? htmlspecialchars($_POST['PC_ID']) : ''; ?>" required><br><br>
@@ -120,7 +119,8 @@ if (!$resultCOMP) {
                 <option value="HIGH-END">HIGH-END</option>
             </select><br><br>
             Location: <input type="text" name="PC_LOC" value="<?php echo isset($_POST['PC_LOC']) ? htmlspecialchars($_POST['PC_LOC']) : ''; ?>"><br><br>
-            Last Maintenance (YYYY-MM-DD HH:MM:SS): <input type="text" name="PC_LASTMAIN" value="<?php echo isset($_POST['PC_LASTMAIN']) ? htmlspecialchars($_POST['PC_LASTMAIN']) : ''; ?>"><br><br>
+            Last Maintenance: <input type="datetime-local" name="PC_LASTMAIN"
+                value="<?php echo htmlspecialchars($old_shift ? date('Y-m-d\TH:i', strtotime($old_shift)) : ''); ?>"><br><br>
             Software: <input type="text" name="PC_SOFTWARE" value="<?php echo isset($_POST['PC_SOFTWARE']) ? htmlspecialchars($_POST['PC_SOFTWARE']) : ''; ?>"><br><br>
             Technician ID (optional): <input type="text" name="TECH_ID" value="<?php echo isset($_POST['TECH_ID']) ? htmlspecialchars($_POST['TECH_ID']) : ''; ?>"><br><br>
 
@@ -129,7 +129,7 @@ if (!$resultCOMP) {
     <?php } ?>
 
     <!-- UPDATE COMPUTER FORM -->
-    <?php if (isset($_POST['Update'])) { ?>
+    <?php if (isset($_POST['Update']) || isset($_GET['action']) === 'update') { ?>
         <h3>Update Computer</h3>
         <form method="post">
             Select Computer (PC_ID):
@@ -161,7 +161,8 @@ if (!$resultCOMP) {
                 <option value="HIGH-END">HIGH-END</option>
             </select><br><br>
             Location: <input type="text" name="PC_LOC"><br><br>
-            Last Maintenance (YYYY-MM-DD HH:MM:SS): <input type="text" name="PC_LASTMAIN"><br><br>
+            Last Maintenance: <input type="datetime-local" name="PC_LASTMAIN"
+                value="<?php echo htmlspecialchars($old_shift ? date('Y-m-d\TH:i', strtotime($old_shift)) : ''); ?>"><br><br>
             Software: <input type="text" name="PC_SOFTWARE"><br><br>
             Technician ID: <input type="text" name="TECH_ID"><br><br>
 
@@ -170,7 +171,7 @@ if (!$resultCOMP) {
     <?php } ?>
 
     <!-- REMOVE COMPUTER FORM -->
-    <?php if (isset($_POST['Remove'])) { ?>
+    <?php if (isset($_POST['Remove']) || isset($_GET['action']) === 'remove') { ?>
         <h3>Remove Computer</h3>
         <form method="post">
             Select Computer (PC_ID):
@@ -214,12 +215,11 @@ if (!$resultCOMP) {
         if (!is_numeric($pc_number)) $errors[] = "PC Number must be numeric.";
         if (!in_array($pc_status, ['ACTIVE', 'INACTIVE', 'MAINTENANCE'])) $errors[] = "Invalid status.";
         if (!in_array($pc_specs, ['ENTRY LEVEL', 'MID RANGE', 'HIGH-END'])) $errors[] = "Invalid specs.";
-        if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $pc_lastmain)) $errors[] = "Last Maintenance must be in YYYY-MM-DD HH:MM:SS format.";
         if (!empty($tech_id) && !preg_match('/^T[0-9]{1,5}$/', $tech_id)) $errors[] = "Technician ID must follow format T0-T99999.";
 
         if (!empty($errors)) {
             $_SESSION['errors_admin_computer'] = $errors;
-            header("Location: admin_computer.php");
+            header("Location: admin_computer.php?action=add");
             exit();
         }
 
@@ -227,13 +227,14 @@ if (!$resultCOMP) {
             VALUES ('$pc_id', '$pc_number', '$pc_status', '$pc_specs', '$pc_loc', '$pc_lastmain', '$pc_software', " . ($tech_id ? "'$tech_id'" : "NULL") . ")";
 
         if ($mysqli->query($sql)) {
-            $_SESSION['message_admin_computer'] = "Computer added successfully!";
+            $_SESSION['message_admin_view'] = "Computer added successfully!";
+            header("Location: admin_view.php");
+            exit();
         } else {
             $_SESSION['errors_admin_computer'] = ["Error adding computer: " . $mysqli->error];
+            header("Location: admin_computer.php?action=add");
+            exit();
         }
-
-        header("Location: admin_computer.php");
-        exit();
     }
 
     // PROCESS UPDATE COMPUTER
@@ -265,7 +266,7 @@ if (!$resultCOMP) {
 
         if (!empty($errors)) {
             $_SESSION['errors_admin_computer'] = $errors;
-            header("Location: admin_computer.php");
+            header("Location: admin_computer.php?action=update");
             exit();
         }
 
@@ -280,13 +281,14 @@ if (!$resultCOMP) {
             WHERE PC_ID='$pc_id'";
 
         if ($mysqli->query($sql)) {
-            $_SESSION['message_admin_computer'] = "Computer updated successfully!";
+            $_SESSION['message_admin_view'] = "Computer updated successfully!";
+            header("Location: admin_view.php");
+            exit();
         } else {
             $_SESSION['errors_admin_computer'] = ["Error updating computer: " . $mysqli->error];
+            header("Location: admin_computer.php?action=update");
+            exit();
         }
-
-        header("Location: admin_computer.php");
-        exit();
     }
 
     // PROCESS REMOVE COMPUTER
@@ -303,19 +305,20 @@ if (!$resultCOMP) {
 
         if (!empty($errors)) {
             $_SESSION['errors_admin_computer'] = $errors;
-            header("Location: admin_computer.php");
+            header("Location: admin_computer.php?action=remove");
             exit();
         }
 
         $sql = "DELETE FROM Computer WHERE PC_ID='$pc_id'";
         if ($mysqli->query($sql)) {
-            $_SESSION['message_admin_computer'] = "Computer removed successfully!";
+            $_SESSION['message_admin_view'] = "Computer removed successfully!";
+            header("Location: admin_view.php");
+            exit();
         } else {
             $_SESSION['errors_admin_computer'] = ["Error deleting computer: " . $mysqli->error];
+            header("Location: admin_computer.php?action=remove");
+            exit();
         }
-
-        header("Location: admin_computer.php");
-        exit();
     }
     ?>
 
@@ -326,4 +329,3 @@ if (!$resultCOMP) {
 </body>
 
 </html>
-

@@ -2,7 +2,7 @@
 session_start();
 
 $user = 'root';
-$password = '123456';
+$password = 'D1dhen1102';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -17,7 +17,6 @@ $id = isset($_SESSION['id']) ? $_SESSION['id'] : '';
 $sql = "SELECT * FROM Access_Hours";
 $resultACC = $mysqli->query($sql);
 //$mysqli->close();
-
 
 ?>
 
@@ -85,7 +84,6 @@ $resultACC = $mysqli->query($sql);
                 <td><?php echo $row['ACC_COST']; ?></td>
                 <td><?php echo $row['CUS_ID']; ?></td>
                 <td><?php echo $row['CSHR_ID']; ?></td>
-            </tr>
         <?php
         }
         ?>
@@ -99,25 +97,43 @@ $resultACC = $mysqli->query($sql);
         ?>
             <h3>Add Access Hours</h3>
             <label>Access Time:</label>
-            <input type="datetime-local" name="ACC_TIME"><br>
+            <input type="datetime-local" name="ACC_TIME"><br><br>
 
             <label>Start Time:</label>
-            <input type="datetime-local" name="ACC_START"><br>
+            <input type="datetime-local" name="ACC_START"><br><br>
 
             <label>End Time:</label>
-            <input type="datetime-local" name="ACC_END"><br>
+            <input type="datetime-local" name="ACC_END"><br><br>
 
             <label>Duration:</label>
-            <input type="time" name="ACC_DURATION"><br>
+            <input type="time" name="ACC_DURATION"><br><br>
 
             <label>Cost:</label>
-            <input type="number" step="0.01" name="ACC_COST"><br>
+            <input type="number" step="0.01" name="ACC_COST"><br><br>
 
             <label>Customer ID:</label>
-            <input type="text" name="CUS_ID"><br>
+            <select name="CUS_ID" required>
+                <option value="">--Select Customer--</option>
+                <?php
+                $result = $mysqli->query("SELECT CUS_ID FROM Customer");
+                while ($comp = $result->fetch_assoc()) {
+                    echo '<option value="' . htmlspecialchars($comp['CUS_ID']) . '">'
+                        . htmlspecialchars($comp['CUS_ID']) . '</option>';
+                }
+                ?>
+            </select><br><br>
 
             <label>Cashier ID:</label>
-            <input type="text" name="CSHR_ID"><br>
+            <select name="CSHR_ID" required>
+                <option value="">--Select Cashier--</option>
+                <?php
+                $result = $mysqli->query("SELECT CSHR_ID FROM Cashier");
+                while ($comp = $result->fetch_assoc()) {
+                    echo '<option value="' . htmlspecialchars($comp['CSHR_ID']) . '">'
+                        . htmlspecialchars($comp['CSHR_ID']) . '</option>';
+                }
+                ?>
+            </select><br><br>
 
             <button type="submit" name="AddFinal">Add Access Hours</button>
         <?php
@@ -162,7 +178,7 @@ $resultACC = $mysqli->query($sql);
                         VALUES ('$acc_time', '$acc_start', '$acc_end', '$acc_duration', '$acc_cost', '$cus_id', '$cashier_id')";
 
             if ($mysqli->query($sql)) {
-                $_SESSION['message_admin_access_hours'] = "Access Hours record added successfully.";
+                $_SESSION['message_admin_view'] = "Access Hours record added successfully.";
                 header("Location: admin_view.php");
                 exit();
             } else {
@@ -177,7 +193,7 @@ $resultACC = $mysqli->query($sql);
         ?>
             <h3>Remove Access Hours</h3>
             <label>Access Time:</label>
-            <input type="datetime-local" name="ACC_TIME" required><br>
+            <input type="datetime-local" name="ACC_TIME" required><br><br>
 
             <button type="submit" name="RemoveFinal">Remove Access Hours</button>
         <?php
@@ -205,7 +221,7 @@ $resultACC = $mysqli->query($sql);
             $sql = "DELETE FROM Access_Hours WHERE ACC_TIME = '$acc_time'";
             if ($mysqli->query($sql)) {
                 if ($mysqli->affected_rows > 0) {
-                    $_SESSION['message_admin_access_hours'] = "Access Hours record removed successfully.";
+                    $_SESSION['message_admin_view'] = "Access Hours record removed successfully.";
                     header("Location: admin_view.php");
                     exit();
                 } else {
@@ -221,6 +237,10 @@ $resultACC = $mysqli->query($sql);
         }
         ?>
 
+    </form>
+
+    <form action="admin_view.php" method="post">
+        <Button type="submit" name="Back">Back to Admin View</button>
     </form>
 </body>
 

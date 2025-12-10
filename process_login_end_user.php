@@ -1,7 +1,7 @@
 <?php
 session_start();
 $user = 'root';
-$password = '123456';
+$password = 'D1dhen1102';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 

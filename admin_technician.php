@@ -2,7 +2,7 @@
 session_start();
 
 $user = 'root';
-$password = '123456';
+$password = 'D1dhen1102';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -92,7 +92,7 @@ if (!$resultTECH) {
 
     <?php
     // SHOW ADD TECHNICIAN FORM
-    if (isset($_POST['Add'])) {
+    if (isset($_POST['Add']) || isset($_GET['action']) === 'add') {
     ?>
         <h3>Add Technician</h3>
 
@@ -101,7 +101,7 @@ if (!$resultTECH) {
             Technician ID (TECH_ID): <input type="text" name="TECH_ID" value="<?php echo isset($_POST['TECH_ID']) ? htmlspecialchars($_POST['TECH_ID']) : ''; ?>" required><br><br>
             First Name: <input type="text" name="TECH_FNAME" value="<?php echo isset($_POST['TECH_FNAME']) ? htmlspecialchars($_POST['TECH_FNAME']) : ''; ?>"><br><br>
             Last Name: <input type="text" name="TECH_LNAME" value="<?php echo isset($_POST['TECH_LNAME']) ? htmlspecialchars($_POST['TECH_LNAME']) : ''; ?>"><br><br>
-            Shift: <input type="text" name="TECH_SHIFT" value="<?php echo isset($_POST['TECH_SHIFT']) ? htmlspecialchars($_POST['TECH_SHIFT']) : ''; ?>"><br><br>
+            Shift: <input type="datetime-local" name="TECH_SHIFT" value="<?php echo htmlspecialchars($old_shift ? date('Y-m-d\TH:i', strtotime($old_shift)) : ''); ?>"><br><br>
             Salary: <input type="number" name="TECH_SALARY" value="<?php echo isset($_POST['TECH_SALARY']) ? htmlspecialchars($_POST['TECH_SALARY']) : ''; ?>"><br><br>
             Specialization: <input type="text" name="TECH_SPECIALIZATION" value="<?php echo isset($_POST['TECH_SPECIALIZATION']) ? htmlspecialchars($_POST['TECH_SPECIALIZATION']) : ''; ?>"><br><br>
 
@@ -141,7 +141,7 @@ if (!$resultTECH) {
         if (!empty($errors)) {
             $_SESSION['errors_admin_technician'] = $errors;
             // redirect back to form
-            header("Location: admin_technician.php");
+            header("Location: admin_technician.php?action=add");
             exit();
         }
 
@@ -150,19 +150,33 @@ if (!$resultTECH) {
             (TECH_ID, TECH_FNAME, TECH_LNAME, TECH_SHIFT, TECH_SALARY, TECH_SPECIALIZATION)
             VALUES ('$tech_id', '$fname', '$lname', '$shift', '$salary', '$spec')";
 
-        if (!$mysqli->query($sql)) {
-            echo "<p style='color:red;'>ERROR: " . $mysqli->error . "</p>";
+        if ($mysqli->query($sql)) {
+            $_SESSION['message_admin_view'] = "Technician added successfully!";
+            header("Location: admin_view.php");
+            exit();
         } else {
-            echo "<p style='color:green;'>Technician added successfully!</p>";
+            $_SESSION['errors_admin_technician'] = ["Error updating technician: " . $mysqli->error];
+            header("Location: admin_technician.php?action=add");
+            exit();
         }
     }
 
     // SHOW UPDATE TECHNICIAN FORM
-    if (isset($_POST['Update'])) {
+    if (isset($_POST['Update']) || isset($_GET['action']) === 'update') {
     ?>
         <h3>Update Technician Details</h3>
         <form method="post">
-            Technician ID (TECH_ID): <input type="text" name="TECH_ID" value="<?php echo isset($_POST['TECH_ID']) ? htmlspecialchars($_POST['TECH_ID']) : ''; ?>" required><br><br>
+            Select Technician ID (TECH_ID):
+            <select name="TECH_ID" required>
+                <option value="">--Select Technician--</option>
+                <?php
+                $result = $mysqli->query("SELECT TECH_ID FROM Technician");
+                while ($comp = $result->fetch_assoc()) {
+                    echo '<option value="' . htmlspecialchars($comp['TECH_ID']) . '">'
+                        . htmlspecialchars($comp['TECH_ID']) . '</option>';
+                }
+                ?>
+            </select><br><br>
             First Name: <input type="text" name="TECH_FNAME" value="<?php echo isset($_POST['TECH_FNAME']) ? htmlspecialchars($_POST['TECH_FNAME']) : ''; ?>"><br><br>
             Last Name: <input type="text" name="TECH_LNAME" value="<?php echo isset($_POST['TECH_LNAME']) ? htmlspecialchars($_POST['TECH_LNAME']) : ''; ?>"><br><br>
             Shift: <input type="text" name="TECH_SHIFT" value="<?php echo isset($_POST['TECH_SHIFT']) ? htmlspecialchars($_POST['TECH_SHIFT']) : ''; ?>"><br><br>
@@ -213,7 +227,7 @@ if (!$resultTECH) {
         // If there are errors, redirect with messages
         if (!empty($errors)) {
             $_SESSION['errors_admin_technician'] = $errors;
-            header("Location: admin_technician.php");
+            header("Location: admin_technician.php?action=update");
             exit();
         }
 
@@ -228,22 +242,33 @@ if (!$resultTECH) {
 
         if ($mysqli->query($sql)) {
             $_SESSION['message_admin_technician'] = "Technician updated successfully! (Blank fields kept original values)";
+            header("Location: admin_view.php");
+            exit();
         } else {
             $_SESSION['errors_admin_technician'] = ["Error updating technician: " . $mysqli->error];
+            header("Location: admin_technician.php?action=update");
+            exit();
         }
-
-        header("Location: admin_technician.php");
-        exit();
     }
     ?>
 
     <?php
     // SHOW REMOVE TECHNICIAN FORM
-    if (isset($_POST['Remove'])) {
+    if (isset($_POST['Remove']) || isset($_GET['action']) === 'remove') {
     ?>
         <h3>Remove Technician</h3>
         <form method="post">
-            Technician ID (TECH_ID): <input type="text" name="TECH_ID"><br><br>
+            Technician ID (TECH_ID):
+            <select name="TECH_ID" required>
+                <option value="">--Select Technician--</option>
+                <?php
+                $result = $mysqli->query("SELECT TECH_ID FROM Technician");
+                while ($comp = $result->fetch_assoc()) {
+                    echo '<option value="' . htmlspecialchars($comp['TECH_ID']) . '">'
+                        . htmlspecialchars($comp['TECH_ID']) . '</option>';
+                }
+                ?>
+            </select><br><br>
             <button type="submit" name="RemoveSubmit">Remove Technician</button>
         </form>
     <?php
@@ -273,20 +298,21 @@ if (!$resultTECH) {
 
         if (!empty($errors)) {
             $_SESSION['errors_admin_technician'] = $errors;
-            header("Location: admin_technician.php");
+            header("Location: admin_technician.php?action=remove");
             exit();
         }
 
         // Delete technician
         $sql = "DELETE FROM Technician WHERE TECH_ID='$id'";
         if ($mysqli->query($sql)) {
-            $_SESSION['message_admin_technician'] = "Technician removed successfully!";
+            $_SESSION['message_admin_view'] = "Technician removed successfully!";
+            header("Location: admin_view.php");
+            exit();
         } else {
             $_SESSION['errors_admin_technician'] = ["Error deleting technician: " . $mysqli->error];
+            header("Location: admin_technician.php?action=remove");
+            exit();
         }
-
-        header("Location: admin_technician.php");
-        exit();
     }
     ?>
 

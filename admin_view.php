@@ -2,7 +2,7 @@
 session_start();
 
 $user = 'root';
-$password = '123456';
+$password = 'D1dhen1102';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -61,18 +61,18 @@ $resultACC = $mysqli->query($sql);
 <body>
     <h2>Welcome, <?php echo htmlspecialchars($username); ?>!</h2>
     <?php
-    if (isset($_SESSION['errors_admin_view']) && !empty($_SESSION['errors_admin_view'])) {
+    if (isset($_SESSION['errors_end_user']) && !empty($_SESSION['errors_end_user'])) {
         echo '<div class="error">';
-        foreach ($_SESSION['errors_admin_view'] as $error) {
+        foreach ($_SESSION['errors_end_user'] as $error) {
             echo htmlspecialchars($error) . '<br>';
         }
         echo '</div>';
-        unset($_SESSION['errors_admin_view']);
+        unset($_SESSION['errors_end_user']);
     }
 
-    if (isset($_SESSION['message_admin_view'])) {
-        echo '<div class="error">' . htmlspecialchars($_SESSION['message_admin_view']) . '</div>';
-        unset($_SESSION['message_admin_view']);
+    if (isset($_SESSION['message_end_user'])) {
+        echo '<div class="error">' . htmlspecialchars($_SESSION['message_end_user']) . '</div>';
+        unset($_SESSION['message_end_user']);
     }
     ?>
 
@@ -166,7 +166,7 @@ $resultACC = $mysqli->query($sql);
         ?>
     </table>
     <br>
-    <form action="admin_pc.php" method="post">
+    <form action="admin_computer.php" method="post">
         <Button type="submit" name="Add">Add PC</button>
         <Button type="submit" name="Update">Update PC Details</button>
         <Button type="submit" name="Remove">Remove PC</button>
@@ -201,7 +201,7 @@ $resultACC = $mysqli->query($sql);
         ?>
     </table>
     <br>
-    <form action="admin_transaction.php" method="post">
+    <form action="admin_transact.php" method="post">
         <Button type="submit" name="Add">Add Transaction</button>
     </form>
     <br><br>
@@ -239,6 +239,5 @@ $resultACC = $mysqli->query($sql);
         <Button type="submit" name="Remove">Remove Access Hours</button>
     </form>
 </body>
-
 
 </html>

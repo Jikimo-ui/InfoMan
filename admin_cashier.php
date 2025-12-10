@@ -2,7 +2,7 @@
 session_start();
 
 $user = 'root';
-$password = '123456';
+$password = 'D1dhen1102';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -135,7 +135,16 @@ $resultCashier = $mysqli->query("SELECT * FROM Cashier");
         ?>
             <h3>Update Cashier</h3>
             <label>Cashier ID:</label>
-            <input type="text" name="CSHR_ID" required><br><br>
+            <select name="CSHR_ID" required>
+                <option value="">--Select Cashier--</option>
+                <?php
+                $result = $mysqli->query("SELECT CSHR_ID FROM Cashier");
+                while ($comp = $result->fetch_assoc()) {
+                    echo '<option value="' . htmlspecialchars($comp['CSHR_ID']) . '">'
+                        . htmlspecialchars($comp['CSHR_ID']) . '</option>';
+                }
+                ?>
+            </select><br><br>
 
             <label>New First Name:</label>
             <input type="text" name="CSHR_FNAME"><br><br>
@@ -161,7 +170,16 @@ $resultCashier = $mysqli->query("SELECT * FROM Cashier");
         ?>
             <h3>Remove Cashier</h3>
             <label>Cashier ID:</label>
-            <input type="text" name="CSHR_ID" required><br><br>
+            <select name="CSHR_ID" required>
+                <option value="">--Select Cashier--</option>
+                <?php
+                $result = $mysqli->query("SELECT CSHR_ID FROM Cashier");
+                while ($comp = $result->fetch_assoc()) {
+                    echo '<option value="' . htmlspecialchars($comp['CSHR_ID']) . '">'
+                        . htmlspecialchars($comp['CSHR_ID']) . '</option>';
+                }
+                ?>
+            </select><br><br>
             <button type="submit" name="RemoveSubmit">Remove Cashier</button>
         <?php
         }
@@ -178,7 +196,7 @@ $resultCashier = $mysqli->query("SELECT * FROM Cashier");
         $salary = $_POST['CSHR_SALARY'];
 
         $errors = [];
-        
+
         if (empty($id)) {
             $errors[] = "Cashier ID is required.";
         } else if (!preg_match('/^CS[0-9]{1,4}$/', $id)) $errors[] = "Cashier ID must follow format CS0-CS9999.";
@@ -192,12 +210,14 @@ $resultCashier = $mysqli->query("SELECT * FROM Cashier");
         $sql = "INSERT INTO Cashier (CSHR_ID, CSHR_FNAME, CSHR_LNAME, CSHR_SHIFT, CSHR_SALARY)
             VALUES ('$id', '$fname', '$lname', '$shift', '$salary')";
         if ($mysqli->query($sql)) {
-            $_SESSION['message_admin_cashier'] = "Cashier added successfully.";
+            $_SESSION['message_admin_view'] = "Cashier added successfully.";
+            header("Location: admin_view.php");
+            exit();
         } else {
             $_SESSION['errors_admin_cashier'] = ["Error: " . $mysqli->error];
+            header("Location: admin_cashier.php?action=add");
+            exit();
         }
-        header("Location: admin_cashier.php");
-        exit();
     }
 
     // Handle UpdateSubmit
@@ -224,12 +244,14 @@ $resultCashier = $mysqli->query("SELECT * FROM Cashier");
                 CSHR_SALARY='$salary'
             WHERE CSHR_ID='$id'";
         if ($mysqli->query($sql)) {
-            $_SESSION['message_admin_cashier'] = "Cashier updated successfully.";
+            $_SESSION['message_admin_view'] = "Cashier updated successfully.";
+            header("Location: admin_view.php");
+            exit();
         } else {
             $_SESSION['errors_admin_cashier'] = ["Error: " . $mysqli->error];
+            header("Location: admin_cashier.php?action=update");
+            exit();
         }
-        header("Location: admin_cashier.php");
-        exit();
     }
 
 

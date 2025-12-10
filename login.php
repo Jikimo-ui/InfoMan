@@ -29,7 +29,6 @@ unset($_SESSION['error']); // clear error after showing
   }
   ?>
 
-  XAMPP FOLDER
   <h1>Customer Login</h1>
   <form action="process_login_end_user.php" method="post">
     <label>Username:</label>
