@@ -242,7 +242,7 @@ if (!$resultTECH) {
             WHERE TECH_ID='$id'";
 
         if ($mysqli->query($sql)) {
-            $_SESSION['message_admin_technician'] = "Technician updated successfully! (Blank fields kept original values)";
+            $_SESSION['message_admin_view'] = "Technician updated successfully! (Blank fields kept original values)";
             header("Location: admin_view.php");
             exit();
         } else {
@@ -326,4 +326,5 @@ if (!$resultTECH) {
 
 
 </html>
+
 
