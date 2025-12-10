@@ -164,7 +164,17 @@ if (!$resultCOMP) {
             Last Maintenance: <input type="datetime-local" name="PC_LASTMAIN"
                 value="<?php echo htmlspecialchars($old_shift ? date('Y-m-d\TH:i', strtotime($old_shift)) : ''); ?>"><br><br>
             Software: <input type="text" name="PC_SOFTWARE"><br><br>
-            Technician ID: <input type="text" name="TECH_ID"><br><br>
+            Technician ID:
+            <select name="TECH_ID">
+                <option value="">--Keep Current--</option>
+                <?php
+                $result = $mysqli->query("SELECT TECH_ID FROM Technician");
+                while ($comp = $result->fetch_assoc()) {
+                    echo '<option value="' . htmlspecialchars($comp['TECH_ID']) . '">'
+                        . htmlspecialchars($comp['TECH_ID']) . '</option>';
+                }
+                ?>
+            </select><br><br>
 
             <button type="submit" name="UpdateSubmit">Submit</button>
         </form>
@@ -327,6 +337,5 @@ if (!$resultCOMP) {
         <button type="submit">Return to Admin View</button>
     </form>
 </body>
-
 
 </html>
