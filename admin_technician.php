@@ -2,7 +2,7 @@
 session_start();
 
 $user = 'root';
-$password = 'D1dhen1102';
+$password = '123456';
 $database = 'InternetCafe';
 $servername = 'localhost:3310';
 
@@ -322,5 +322,6 @@ if (!$resultTECH) {
     </form>
 
 </body>
+
 
 </html>
