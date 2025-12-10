@@ -179,7 +179,7 @@ if (!$resultTECH) {
             </select><br><br>
             First Name: <input type="text" name="TECH_FNAME" value="<?php echo isset($_POST['TECH_FNAME']) ? htmlspecialchars($_POST['TECH_FNAME']) : ''; ?>"><br><br>
             Last Name: <input type="text" name="TECH_LNAME" value="<?php echo isset($_POST['TECH_LNAME']) ? htmlspecialchars($_POST['TECH_LNAME']) : ''; ?>"><br><br>
-            Shift:<input type="datetime-local" name="TECH_SHIFT" value="<?php echo htmlspecialchars($old_shift ? date('Y-m-d\TH:i', strtotime($old_shift)) : ''); ?>"><br><br>
+            Shift: <input type="datetime-local" name="TECH_SHIFT" value="<?php echo htmlspecialchars($old_shift ? date('Y-m-d\TH:i', strtotime($old_shift)) : ''); ?>"><br><br>
             Salary: <input type="number" name="TECH_SALARY" value="<?php echo isset($_POST['TECH_SALARY']) ? htmlspecialchars($_POST['TECH_SALARY']) : ''; ?>"><br><br>
             Specialization: <input type="text" name="TECH_SPECIALIZATION" value="<?php echo isset($_POST['TECH_SPECIALIZATION']) ? htmlspecialchars($_POST['TECH_SPECIALIZATION']) : ''; ?>"><br><br>
 
@@ -326,4 +326,5 @@ if (!$resultTECH) {
 
 
 </html>
+
 
