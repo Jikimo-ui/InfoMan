@@ -166,6 +166,9 @@ $resultACC = $mysqli->query($sql);
             if (empty($acc_cost)) {
                 $errors[] = "Cost is required.";
             }
+            elseif (!is_numeric($acc_cost) || floatval($acc_cost) < 0) {
+                $errors[] = "Cost must be a non-negative numeric value.";
+            }
 
             if (count($errors) > 0) {
                 $_SESSION['errors_admin_access_hours'] = $errors;
@@ -243,6 +246,5 @@ $resultACC = $mysqli->query($sql);
         <Button type="submit" name="Back">Back to Admin View</button>
     </form>
 </body>
-
 
 </html>
