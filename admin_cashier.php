@@ -201,6 +201,13 @@ $resultCashier = $mysqli->query("SELECT * FROM Cashier");
             $errors[] = "Cashier ID is required.";
         } else if (!preg_match('/^CS[0-9]{1,4}$/', $id)) $errors[] = "Cashier ID must follow format CS0-CS9999.";
 
+        // Salary validation: must be numeric and non-negative
+        if (!isset($salary) || trim($salary) === '') {
+            $errors[] = "Salary is required.";
+        } elseif (!is_numeric($salary) || floatval($salary) < 0) {
+            $errors[] = "Salary must be a non-negative numeric value.";
+        }
+
         if ($errors) {
             $_SESSION['errors_admin_cashier'] = $errors;
             header("Location: admin_cashier.php?action=add");
@@ -236,6 +243,20 @@ $resultCashier = $mysqli->query("SELECT * FROM Cashier");
         $lname = $_POST['CSHR_LNAME'] !== "" ? $_POST['CSHR_LNAME'] : $existing['CSHR_LNAME'];
         $shift = $_POST['CSHR_SHIFT'] !== "" ? $_POST['CSHR_SHIFT'] : $existing['CSHR_SHIFT'];
         $salary = $_POST['CSHR_SALARY'] !== "" ? $_POST['CSHR_SALARY'] : $existing['CSHR_SALARY'];
+
+        // Validate salary (after choosing new or existing value)
+        $errors = [];
+        if (!isset($salary) || trim((string)$salary) === '') {
+            $errors[] = "Salary is required.";
+        } elseif (!is_numeric($salary) || floatval($salary) < 0) {
+            $errors[] = "Salary must be a non-negative numeric value.";
+        }
+
+        if (!empty($errors)) {
+            $_SESSION['errors_admin_cashier'] = $errors;
+            header("Location: admin_cashier.php?action=update");
+            exit();
+        }
 
         $sql = "UPDATE Cashier SET
                 CSHR_FNAME='$fname',
@@ -297,6 +318,5 @@ $resultCashier = $mysqli->query("SELECT * FROM Cashier");
         <button type="submit">Return to Admin View</button>
     </form>
 </body>
-
 
 </html>
