@@ -137,6 +137,8 @@ if (!$resultTECH) {
         if (empty(trim($lname))) $errors[] = "Last name is required.";
         if (empty(trim($shift))) $errors[] = "Shift is required.";
         if (empty(trim($salary))) $errors[] = "Salary is required.";
+        elseif (!is_numeric($salary) || floatval($salary) < 0) $errors[] = "Salary must be a non-negative numeric value.";
+        if (empty(trim($spec))) $errors[] = "Specialization cannot be empty.";
 
         if (!empty($errors)) {
             $_SESSION['errors_admin_technician'] = $errors;
@@ -222,7 +224,7 @@ if (!$resultTECH) {
         if (empty(trim($fname))) $errors[] = "First name cannot be empty.";
         if (empty(trim($lname))) $errors[] = "Last name cannot be empty.";
         if (empty(trim($shift))) $errors[] = "Shift cannot be empty.";
-        if (!is_numeric($salary)) $errors[] = "Salary must be a numeric value.";
+        if (!is_numeric($salary) || floatval($salary) < 0) $errors[] = "Salary must be a non-negative numeric value.";
         if (empty(trim($spec))) $errors[] = "Specialization cannot be empty.";
 
         // If there are errors, redirect with messages
@@ -326,5 +328,4 @@ if (!$resultTECH) {
 
 
 </html>
-
 
