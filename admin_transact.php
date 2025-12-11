@@ -110,7 +110,7 @@ $resultTransact = $mysqli->query($sql);
             <input type="date" name="TRNSC_DATE" required><br><br>
 
             <label>Amount:</label>
-            <input type="number" name="TRNSC_AMOUNT" step="0.01" min="0" required><br><br>
+            <input type="text" name="TRNSC_AMOUNT"><br><br>
 
             <label>Customer ID:</label>
             <select name="CUS_ID" required>
@@ -172,7 +172,11 @@ $resultTransact = $mysqli->query($sql);
             if (empty($mop)) $errors[] = "Mode of Payment is required.";
             if (empty($time)) $errors[] = "Time is required.";
             if (empty($date)) $errors[] = "Date is required.";
-            if (empty($amount)) $errors[] = "Amount is required.";
+            if (!isset($_POST['TRNSC_AMOUNT']) || trim((string)$amount) === '') {
+                $errors[] = "Amount is required.";
+            } elseif (!is_numeric($amount) || floatval($amount) < 0) {
+                $errors[] = "Amount must be a non-negative numeric value.";
+            }
 
             if (count($errors) > 0) {
                 $_SESSION['errors_admin_transact'] = $errors;
